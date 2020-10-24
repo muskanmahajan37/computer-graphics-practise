@@ -31,12 +31,22 @@ def startup():
 def shutdown():
     pass
 
-def draw_rectangle(x_of_center,y_of_center, width, height):
+def draw_rectangle(x_of_center,y_of_center, width, height, color, d = 1):
+    if(not color):
+        colors = []
+        for i in range(0,4):
+            color.append([
+                        random.random(),
+                        random.random(),
+                        random.random()
+                        ])
+        return colors
+    
     nodes = {
-        'node0': (x_of_center + width/2, y_of_center + height/2, [1.0, 0.0, 0.0]),
-        'node1': (x_of_center - width/2, y_of_center + height/2, [0.0 , 0.0, 1.0]),
-        'node2': (x_of_center + width/2, y_of_center - height/2, [0.0, 0.0, 1.0]),
-        'node3': (x_of_center - width/2, y_of_center - height/2, [1.0, 0.0, 0.0]),
+        'node0': (x_of_center + width/2*d, y_of_center + height*d/2, color[0]),
+        'node1': (x_of_center - width/2*d, y_of_center + height/2*d, color[1]),
+        'node2': (x_of_center + width/2*d, y_of_center - height/2*d, color[2]),
+        'node3': (x_of_center - width/2*d, y_of_center - height/2*d, color[3])
     }
 
     glBegin(GL_TRIANGLES)
@@ -58,10 +68,12 @@ def draw_rectangle(x_of_center,y_of_center, width, height):
     glEnd()
 
     glFlush()
+    return color
 
-def render(time):
+
+def render(time, colors):
     glClear(GL_COLOR_BUFFER_BIT)
-    draw_rectangle(0,0,50.0,80.0)
+    colors = draw_rectangle(0,0,50.0,80.0, colors)
     
 '''
     #Zadanie 1
@@ -102,6 +114,7 @@ def update_viewport(window, width, height):
 
 
 def main():
+    colors = []
     if not glfwInit():
         sys.exit(-1)
 
@@ -116,7 +129,7 @@ def main():
 
     startup()
     while not glfwWindowShouldClose(window):
-        render(glfwGetTime())
+        render(glfwGetTime(), colors=colors)
         glfwSwapBuffers(window)
         glfwPollEvents()
     shutdown()
