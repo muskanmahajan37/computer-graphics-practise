@@ -47,7 +47,7 @@ def draw_rectangle(x_of_center,y_of_center, width, height):
     glColor3fv(nodes['node2'][2])
     glVertex2f(nodes['node2'][0], nodes['node2'][1])
     glEnd()
-
+#comment
     glBegin(GL_TRIANGLES)
     glColor3fv(nodes['node1'][2])
     glVertex2f(nodes['node1'][0], nodes['node1'][1])
@@ -64,6 +64,7 @@ def render(time):
     draw_rectangle(0,0,50.0,80.0)
     
 '''
+    #Zadanie 1
     glColor3fv(lista)
     glBegin(GL_TRIANGLES)
     glColor3f(0.0, 1.0, 0.0)
@@ -108,7 +109,7 @@ def main():
     if not window:
         glfwTerminate()
         sys.exit(-1)
-
+    
     glfwMakeContextCurrent(window)
     glfwSetFramebufferSizeCallback(window, update_viewport)
     glfwSwapInterval(1)
