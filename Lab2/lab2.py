@@ -31,11 +31,28 @@ def startup():
 def shutdown():
     pass
 
+
+def draw_carpet(x_center, y_center, width, height, color, self_similarity = 0):
+    if self_similarity != 0:
+        draw_carpet(x_center - width/3, y_center+height/3, width/3, height/3, color,self_similarity-1)
+        draw_carpet(x_center, y_center+height/3, width/3, height/3, color, self_similarity-1)
+        draw_carpet(x_center + width/3, y_center+height/3, width/3, height/3, color, self_similarity-1)
+        draw_carpet(x_center - width/3, y_center, width/3, height/3, color, self_similarity-1)
+        draw_carpet(x_center + width/3, y_center, width/3, height/3, color, self_similarity-1)
+        draw_carpet(x_center - width/3, y_center-height/3, width/3, height/3, color, self_similarity-1)
+        draw_carpet(x_center, y_center-height/3, width/3, height/3, color, self_similarity-1)
+        draw_carpet(x_center + width/3, y_center-height/3, width/3, height/3, color, self_similarity-1)
+    else:
+        if not color:
+            color = draw_rectangle(x_center, y_center, width, height, color)
+        draw_rectangle(x_center, y_center, width, height, color)
+
+
 def draw_rectangle(x_of_center,y_of_center, width, height, color, d = 1):
+    colors = []
     if(not color):
-        colors = []
         for i in range(0,4):
-            color.append([
+            colors.append([
                         random.random(),
                         random.random(),
                         random.random()
@@ -58,7 +75,7 @@ def draw_rectangle(x_of_center,y_of_center, width, height, color, d = 1):
     glVertex2f(nodes['node2'][0], nodes['node2'][1])
     glEnd()
 #comment
-    glBegin(GL_TRIANGLES)
+    glBegin(GL_TRIANGLES)   
     glColor3fv(nodes['node1'][2])
     glVertex2f(nodes['node1'][0], nodes['node1'][1])
     glColor3fv(nodes['node2'][2])
@@ -68,13 +85,13 @@ def draw_rectangle(x_of_center,y_of_center, width, height, color, d = 1):
     glEnd()
 
     glFlush()
-    return color
+    return colors
 
 
 def render(time, colors):
     glClear(GL_COLOR_BUFFER_BIT)
-    colors = draw_rectangle(0,0,50.0,80.0, colors)
-    
+    #colors = draw_rectangle(0,0,50.0,50.0, colors)
+    draw_carpet(0,0,150.0,150.0,[],int(sys.argv[1]))
 '''
     #Zadanie 1
     glColor3fv(lista)
