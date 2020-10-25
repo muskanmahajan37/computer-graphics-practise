@@ -1,11 +1,19 @@
 #!/usr/bin/env python3
 import sys
+import numpy as np
+import random
+from scipy import norm
 
 from glfw.GLFW import *
 
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
+m_size = 1025
+array_of_points = np.zeros((m_size,m_size))
+
+def initialize_array():
+    pass
 
 def startup():
     update_viewport(None, 400, 400)
@@ -15,8 +23,15 @@ def startup():
 def shutdown():
     pass
 
+def randomize_color_monochromatic():
+    color = random.randint(0,255) 
+    return [color for i in range(0,3)]
 
 def render(time):
+ pass
+#glFlush()
+    
+'''
     glClear(GL_COLOR_BUFFER_BIT)
 
     glColor3f(0.0, 1.0, 0.0)
@@ -32,9 +47,7 @@ def render(time):
     glVertex2f(0.0, 50.0)
     glVertex2f(-50.0, 0.0)
     glEnd()
-
-    glFlush()
-
+'''
 
 def update_viewport(window, width, height):
     if height == 0:
