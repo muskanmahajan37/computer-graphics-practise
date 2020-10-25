@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sys
+import time as tajm
 
 from glfw.GLFW import *
 
@@ -92,6 +93,7 @@ def render(time, colors):
     glClear(GL_COLOR_BUFFER_BIT)
     #colors = draw_rectangle(0,0,50.0,50.0, colors)
     draw_carpet(0,0,150.0,150.0,[],int(sys.argv[1]))
+    tajm.sleep(1)
 '''
     #Zadanie 1
     glColor3fv(lista)
