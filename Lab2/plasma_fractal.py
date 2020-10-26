@@ -27,6 +27,11 @@ Algo to be implemented
 
     def diamond_step(x,y,step_size, r):
         avg = average of square corners step_size apart
+        map[x+step_size/2][y+step_size/2] = avg + r
+    def square_step(x,y,step_size, r):
+        avg = avg of four corners of diamond
+        map[x][y] = avg + r
+        
 '''
 
 
