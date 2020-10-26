@@ -2,59 +2,49 @@
 import sys
 import numpy as np
 import random
-
+import statistics
 from glfw.GLFW import *
-
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
-m_size = 5
+
+m_size = 1024
 array_of_points = np.zeros((m_size,m_size))
 
-def initialize_array_monochromatic(m_size, array):
+def initialize_array(m_size, array):
     array[0][0] = randomize_color_monochromatic()
     array[m_size-1][0] = randomize_color_monochromatic()
     array[m_size-1][m_size-1] = randomize_color_monochromatic()
     array[0][m_size-1] = randomize_color_monochromatic()
 
-def generate_other_vertecies(array, ax, ay, bx, by, cx, cy, dx, dy):
-    new_wx = ax
-    new_wy = (by-1-ay)//2
-    new_xx = cx-1
-    new_xy = (dy-1-cy)//2
-    new_yx = (cx-1-ax)//2
-    new_yy = ay
-    new_zx = (dx-1-bx)//2
-    new_zy = dy-1
-    new_qx = (cx-1-ax)//2
-    new_qy = (by-1-ay)//2
-    if(array[new_wx][new_wy] == 0): array[new_wx][new_wy] = randomize_color_monochromatic()
-    if(array[new_xx][new_xy] == 0): array[new_xx][new_xy] = randomize_color_monochromatic()
-    if(array[new_yx][new_yy] == 0): array[new_yx][new_yy] = randomize_color_monochromatic()
-    if(array[new_zx][new_zy] == 0): array[new_zx][new_zy] = randomize_color_monochromatic()
-    if(array[new_qx][new_qy] == 0): array[new_qx][new_qy] = randomize_color_monochromatic()
 
-    generate_other_vertecies
-    print(array)
+def diamond_step(len):
+    tmp_length = size/2
 
-''' 
-    '''
+def square_step(len, array):
+    tmp_length = size/2
+    for i in range(0,size//(len-1)):
+        for j in range(0,size//(len-1)):
+            x_loc = (len-1)*x + tmp_length;
+            y_loc = (len-1)*y + tmp_length;
+
+            #color_result = func
+            array[x_loc][y_loc] = 1
+
 def startup():
     update_viewport(None, 400, 400)
     glClearColor(0.5, 0.5, 0.5, 1.0)
     initialize_array_monochromatic(m_size, array_of_points)
-
-    generate_other_vertecies(array_of_points,0,0,0,m_size,m_size,0,m_size,m_size)
 
 
 def shutdown():
     pass
 
 def randomize_color_monochromatic():
-    return random.uniform(0,1) 
+    return random.uniform(0,1)
     
 def render(time):
- pass
+    pass
 #glFlush()
     
 '''
