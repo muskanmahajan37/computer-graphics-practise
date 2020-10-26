@@ -7,14 +7,37 @@ from glfw.GLFW import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
+'''
+Algo to be implemented
+    def diamondSquare(height, width):
+        Map -> 2D array of 0s
+        initialize array with 4 values on the edges
 
-m_size = 1024
-array_of_points = np.zeros((m_size,m_size))
+        step_size = width -1
+        r -> random value 
+            while step_size > 1:
+                leap over map
+                
+                For every square on the map
+                    perform diamond_step
+                For evety diamond on the map
+                    perform square_step
+            step_size /= 2
+            reduce random range for r
+
+    def diamond_step(x,y,step_size, r):
+        avg = average of square corners step_size apart
+'''
+
+
+
+size = 1024
+array_of_points = np.zeros((size,size))
 
 def initialize_array(m_size, array):
     array[0][0] = randomize_color_monochromatic()
-    array[m_size-1][0] = randomize_color_monochromatic()
-    array[m_size-1][m_size-1] = randomize_color_monochromatic()
+    array[size-1][0] = randomize_color_monochromatic()
+    array[size-1][size-1] = randomize_color_monochromatic()
     array[0][m_size-1] = randomize_color_monochromatic()
 
 
@@ -34,7 +57,7 @@ def square_step(len, array):
 def startup():
     update_viewport(None, 400, 400)
     glClearColor(0.5, 0.5, 0.5, 1.0)
-    initialize_array_monochromatic(m_size, array_of_points)
+    initialize_array_monochromatic(size, array_of_points)
 
 
 def shutdown():
