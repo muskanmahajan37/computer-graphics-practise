@@ -12,7 +12,6 @@ Algo to be implemented
     def diamondSquare(height, width):
         Map -> 2D array of 0s
         initialize array with 4 values on the edges
-
         step_size = width -1
         r -> random value 
             while step_size > 1:
@@ -28,48 +27,70 @@ Algo to be implemented
     def diamond_step(x,y,step_size, r):
         avg = average of square corners step_size apart
         map[x+step_size/2][y+step_size/2] = avg + r
+
     def square_step(x,y,step_size, r):
         avg = avg of four corners of diamond
         map[x][y] = avg + r
         
 '''
 
+class Array:
+    
+    def __init__(self, size, *args, **kwargs):
+        self.array = np.zeros((size,size))
+        self.size = size
 
+    def print_array(self):
+        print(self.array)
 
-size = 1024
-array_of_points = np.zeros((size,size))
+    def __decorator(function):
+        def initialize_corners(self):
+            self.array[0][0] = function()
+            self.array[self.size-1][0] = function()
+            self.array[self.size-1][self.size-1] = function()
+            self.array[0][self.size-1] = function()
+            print(self.array)
+        return initialize_corners
 
-def initialize_array(m_size, array):
-    array[0][0] = randomize_color_monochromatic()
-    array[size-1][0] = randomize_color_monochromatic()
-    array[size-1][size-1] = randomize_color_monochromatic()
-    array[0][m_size-1] = randomize_color_monochromatic()
+    @__decorator
+    def grayscale_init():
+        return random.uniform(0,1)
 
+    @__decorator
+    def color_init():
+        return (random.uniform(0,1) for i in range(0,3))
 
-def diamond_step(len):
-    tmp_length = size/2
+    def diamond_step(self, step_size):
+        midway_step = step_size // 2
 
-def square_step(len, array):
-    tmp_length = size/2
-    for i in range(0,size//(len-1)):
-        for j in range(0,size//(len-1)):
-            x_loc = (len-1)*x + tmp_length;
-            y_loc = (len-1)*y + tmp_length;
+        for i in range(0, self.size, step_size):
+            for j in range(0, self.size, step_size):
+                if((i + midway_step) < self.size and (j + midway_step) < self.size):
+                    upper_left_point = self.array[i][j]
+                    upper_right_point = self.array[i + step_size][j]
+                    bottom_left_point = self.array[i][j + step_size]
+                    bottom_right_point = self.array[i + step_size][j + step_size]
+                    print(f"i:{i} --- j:{j}")
+                    print(i + midway_step)
+                    self.array[i + midway_step][j + midway_step] = 0.333333
+                    self.print_array()
+                    print('-'*30)
 
-            #color_result = func
-            array[x_loc][y_loc] = 1
+    def square_step(self, step_size):
+        midway_step = step_size/2
+        for i in range(0, self.size, midway_step):
+            for j in range (0,self.size, midway_step):
+                pass
 
 def startup():
     update_viewport(None, 400, 400)
     glClearColor(0.5, 0.5, 0.5, 1.0)
-    initialize_array_monochromatic(size, array_of_points)
-
+    array = Array(5)
+    array.grayscale_init()
+    array.diamond_step(array.size-1)
 
 def shutdown():
     pass
-
-def randomize_color_monochromatic():
-    return random.uniform(0,1)
     
 def render(time):
     pass
@@ -77,14 +98,12 @@ def render(time):
     
 '''
     glClear(GL_COLOR_BUFFER_BIT)
-
     glColor3f(0.0, 1.0, 0.0)
     glBegin(GL_TRIANGLES)
     glVertex2f(0.0, 0.0)
     glVertex2f(0.0, 50.0)
     glVertex2f(50.0, 0.0)
     glEnd()
-
     glColor3f(1.0, 0.0, 0.0)
     glBegin(GL_TRIANGLES)
     glVertex2f(0.0, 0.0)
@@ -128,6 +147,7 @@ def main():
     glfwSwapInterval(1)
 
     startup()
+
     while not glfwWindowShouldClose(window):
         render(glfwGetTime())
         glfwSwapBuffers(window)
