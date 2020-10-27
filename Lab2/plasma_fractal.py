@@ -7,6 +7,8 @@ from glfw.GLFW import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
+
+iteration = 0
 '''
 Algo to be implemented
     def diamondSquare(height, width):
@@ -70,47 +72,73 @@ class Array:
                     upper_right_point = self.array[i + step_size][j]
                     bottom_left_point = self.array[i][j + step_size]
                     bottom_right_point = self.array[i + step_size][j + step_size]
-                    print(f"i:{i} --- j:{j}")
-                    print(i + midway_step)
-                    self.array[i + midway_step][j + midway_step] = 0.333333
-                    self.print_array()
-                    print('-'*30)
+                    #print(f"i:{i} --- j:{j}")
+                    #print(i + midway_step)
+                    self.array[i + midway_step][j + midway_step] = (upper_left_point +upper_right_point +bottom_left_point +bottom_right_point)/4
+                    #self.print_array()
+                    #print('-'*30)
 
     def square_step(self, step_size):
-        midway_step = step_size/2
+        check_left = lambda i, j, mid_step: 0 if j-mid_step<0 else self.array[i][j-mid_step] #x- współrzędna y-przesunięcie
+        check_right = lambda i, j, mid_step: 0 if j+mid_step>self.size-1 else self.array[i][j+mid_step]
+        check_up = lambda i, j, mid_step: 0 if i-mid_step<0 else self.array[i-mid_step][j]
+        check_down = lambda i, j, mid_step: 0 if i+mid_step>self.size-1 else self.array[i+mid_step][j]
+        
+        midway_step = step_size//2
+        odd_case = False
         for i in range(0, self.size, midway_step):
-            for j in range (0,self.size, midway_step):
-                pass
+            x = (lambda condition: midway_step if  not condition else 0)(odd_case)
+            #print(odd_case)
+            #print(x)
+            for j in range (x, self.size, midway_step):
+                left_field = check_left(i, j, midway_step)
+                right_field = check_right(i, j, midway_step)
+                up_field = check_up(i, j, midway_step)
+                down_field = check_down(i, j, midway_step)
+                if(self.array[j][i]==0 or iteration!=0):
+                    self.array[j][i] = (left_field + right_field + up_field + down_field) /4
+                    #print(f'[{j}][{i}]: {left_field}, {right_field}, {up_field}, {down_field}')
+                #x = sum(self.array[j][i])
+                #print(f'{left(j, midway_step)} --- x:{j} ---y:{i}')
+            odd_case = not odd_case
+
+    def diamond_square_algorithm(self):
+        global iteration
+        step_size = self.size-1
+        print('='*50)
+        print('Size:', step_size, '  Iteration:', iteration)
+        self.print_array()
+        while step_size > 1:
+            self.diamond_step(step_size)
+            self.square_step(step_size)
+            step_size //=2
+        iteration += 1
+            
 
 def startup():
     update_viewport(None, 400, 400)
     glClearColor(0.5, 0.5, 0.5, 1.0)
-    array = Array(5)
+    array = Array(513)
     array.grayscale_init()
-    array.diamond_step(array.size-1)
-
+    array.diamond_square_algorithm()
+    array.print_array()
+    print("="*50)
+    return array
 def shutdown():
     pass
     
-def render(time):
-    pass
-#glFlush()
-    
-'''
+def render(time, array):
+    array.diamond_square_algorithm()
     glClear(GL_COLOR_BUFFER_BIT)
-    glColor3f(0.0, 1.0, 0.0)
-    glBegin(GL_TRIANGLES)
-    glVertex2f(0.0, 0.0)
-    glVertex2f(0.0, 50.0)
-    glVertex2f(50.0, 0.0)
+    glPointSize(3)
+    glBegin(GL_POINTS)
+    for i in range(0,array.size):
+        for j in range(0,array.size):
+            color = array.array[i][j]
+            glColor3fv([color, color, color])
+            glVertex2f(i * 100.0/array.size, j*100.0/array.size)
     glEnd()
-    glColor3f(1.0, 0.0, 0.0)
-    glBegin(GL_TRIANGLES)
-    glVertex2f(0.0, 0.0)
-    glVertex2f(0.0, 50.0)
-    glVertex2f(-50.0, 0.0)
-    glEnd()
-'''
+    glFlush()
 
 def update_viewport(window, width, height):
     if height == 0:
@@ -146,10 +174,10 @@ def main():
     glfwSetFramebufferSizeCallback(window, update_viewport)
     glfwSwapInterval(1)
 
-    startup()
+    arr = startup()
 
     while not glfwWindowShouldClose(window):
-        render(glfwGetTime())
+        render(glfwGetTime(), arr)
         glfwSwapBuffers(window)
         glfwPollEvents()
     shutdown()
