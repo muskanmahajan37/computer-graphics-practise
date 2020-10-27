@@ -74,7 +74,12 @@ class Array:
                     bottom_right_point = self.array[i + step_size][j + step_size]
                     #print(f"i:{i} --- j:{j}")
                     #print(i + midway_step)
-                    self.array[i + midway_step][j + midway_step] = (upper_left_point +upper_right_point +bottom_left_point +bottom_right_point)/4
+                    w = random.normalvariate(0,2.32)
+                    self.array[i + midway_step][j + midway_step] = (1-(4*random.normalvariate(0,2.32)))*random.random() + upper_left_point*random.normalvariate(0,2.32) + upper_right_point*random.normalvariate(0,2.32) + bottom_left_point*random.normalvariate(0,2.32) + bottom_right_point*random.normalvariate(0,2.32)
+                    
+                    
+                    #(upper_left_point +upper_right_point +bottom_left_point +bottom_right_point)/4
+                    
                     #self.print_array()
                     #print('-'*30)
 
@@ -96,7 +101,7 @@ class Array:
                 up_field = check_up(i, j, midway_step)
                 down_field = check_down(i, j, midway_step)
                 if(self.array[j][i]==0 or iteration!=0):
-                    self.array[j][i] = (left_field + right_field + up_field + down_field) /4
+                    self.array[j][i] = (1-(2*random.normalvariate(0,1)))*random.random() +left_field*random.normalvariate(0,1) +right_field*random.normalvariate(0,1)
                     #print(f'[{j}][{i}]: {left_field}, {right_field}, {up_field}, {down_field}')
                 #x = sum(self.array[j][i])
                 #print(f'{left(j, midway_step)} --- x:{j} ---y:{i}')
@@ -118,7 +123,7 @@ class Array:
 def startup():
     update_viewport(None, 400, 400)
     glClearColor(0.5, 0.5, 0.5, 1.0)
-    array = Array(257)
+    array = Array(513)
     array.grayscale_init()
     array.diamond_square_algorithm()
     array.print_array()
@@ -136,7 +141,7 @@ def render(time, array):
         for j in range(0,array.size):
             color = array.array[i][j]
             glColor3fv([color, color, color])
-            glVertex2f(i * 100.0/array.size, j*100.0/array.size)
+            glVertex2f(i * 100.0/array.size - 50, j*100.0/array.size -50)
     glEnd()
     glFlush()
 
