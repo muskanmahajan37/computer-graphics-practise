@@ -118,7 +118,7 @@ class Array:
 def startup():
     update_viewport(None, 400, 400)
     glClearColor(0.5, 0.5, 0.5, 1.0)
-    array = Array(513)
+    array = Array(257)
     array.grayscale_init()
     array.diamond_square_algorithm()
     array.print_array()
