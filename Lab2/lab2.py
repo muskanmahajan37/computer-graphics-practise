@@ -19,14 +19,14 @@ def shutdown():
 
 def draw_carpet(x_center, y_center, width, height, self_similarity = 0):
     if self_similarity != 0:
-        draw_carpet(x_center - width/3, y_center+height/3, width/3, height/3, self_similarity-1)
+        draw_carpet(x_center-width/3, y_center+height/3, width/3, height/3, self_similarity-1)
         draw_carpet(x_center, y_center+height/3, width/3, height/3, self_similarity-1)
-        draw_carpet(x_center + width/3, y_center+height/3, width/3, height/3, self_similarity-1)
-        draw_carpet(x_center - width/3, y_center, width/3, height/3, self_similarity-1)
-        draw_carpet(x_center + width/3, y_center, width/3, height/3, self_similarity-1)
-        draw_carpet(x_center - width/3, y_center-height/3, width/3, height/3, self_similarity-1)
+        draw_carpet(x_center+width/3, y_center+height/3, width/3, height/3, self_similarity-1)
+        draw_carpet(x_center-width/3, y_center, width/3, height/3, self_similarity-1)
+        draw_carpet(x_center+width/3, y_center, width/3, height/3, self_similarity-1)
+        draw_carpet(x_center-width/3, y_center-height/3, width/3, height/3, self_similarity-1)
         draw_carpet(x_center, y_center-height/3, width/3, height/3, self_similarity-1)
-        draw_carpet(x_center + width/3, y_center-height/3, width/3, height/3, self_similarity-1)
+        draw_carpet(x_center+width/3, y_center-height/3, width/3, height/3, self_similarity-1)
     else:
         draw_rectangle(x_center, y_center, width, height)
 
