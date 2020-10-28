@@ -2,7 +2,7 @@
 import sys
 import numpy as np
 import random
-import statistics
+from scipy.stats import norm
 from glfw.GLFW import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
@@ -74,8 +74,9 @@ class Array:
                     bottom_right_point = self.array[i + step_size][j + step_size]
                     #print(f"i:{i} --- j:{j}")
                     #print(i + midway_step)
-                    w = random.normalvariate(0,2.32)
-                    self.array[i + midway_step][j + midway_step] = (1-(4*random.normalvariate(0,2.32)))*random.random() + upper_left_point*random.normalvariate(0,2.32) + upper_right_point*random.normalvariate(0,2.32) + bottom_left_point*random.normalvariate(0,2.32) + bottom_right_point*random.normalvariate(0,2.32)
+                    x = random.random()
+                    W = norm.pdf(x)/2
+                    self.array[i + midway_step][j + midway_step] = (1-(4*W))*x + upper_left_point*W + upper_right_point*W + bottom_left_point*W + bottom_right_point*W
                     
                     
                     #(upper_left_point +upper_right_point +bottom_left_point +bottom_right_point)/4
@@ -84,13 +85,13 @@ class Array:
                     #print('-'*30)
 
     def square_step(self, step_size):
-        check_left = lambda i, j, mid_step: 0 if j-mid_step<0 else self.array[i][j-mid_step] #x- współrzędna y-przesunięcie
+        check_left = lambda i, j, mid_step: 0 if j-mid_step<0 else self.array[i][j-mid_step]
         check_right = lambda i, j, mid_step: 0 if j+mid_step>self.size-1 else self.array[i][j+mid_step]
         check_up = lambda i, j, mid_step: 0 if i-mid_step<0 else self.array[i-mid_step][j]
         check_down = lambda i, j, mid_step: 0 if i+mid_step>self.size-1 else self.array[i+mid_step][j]
         
         midway_step = step_size//2
-        odd_case = False
+        odd_case = True
         for i in range(0, self.size, midway_step):
             x = (lambda condition: midway_step if  not condition else 0)(odd_case)
             #print(odd_case)
@@ -101,11 +102,13 @@ class Array:
                 up_field = check_up(i, j, midway_step)
                 down_field = check_down(i, j, midway_step)
                 if(self.array[j][i]==0 or iteration!=0):
-                    self.array[j][i] = (1-(2*random.normalvariate(0,1)))*random.random() +left_field*random.normalvariate(0,1) +right_field*random.normalvariate(0,1)
+                    x = random.random()
+                    W_func = norm.pdf(x)
+                    self.array[j][i] = (1-(2*W_func))*x +left_field*W_func +right_field*W_func
                     #print(f'[{j}][{i}]: {left_field}, {right_field}, {up_field}, {down_field}')
                 #x = sum(self.array[j][i])
                 #print(f'{left(j, midway_step)} --- x:{j} ---y:{i}')
-            odd_case = not odd_case
+            odd_case != odd_case
 
     def diamond_square_algorithm(self):
         global iteration
@@ -123,7 +126,7 @@ class Array:
 def startup():
     update_viewport(None, 400, 400)
     glClearColor(0.5, 0.5, 0.5, 1.0)
-    array = Array(513)
+    array = Array(129)
     array.grayscale_init()
     array.diamond_square_algorithm()
     array.print_array()
