@@ -76,9 +76,11 @@ class Array:
                     #print(i + midway_step)
                     x = np.random.normal(0,1,1)
                     W = ((norm.pdf(x)*1.25)/2)
-                    y = np.random.normal((0,2,1))
-                    self.array[i + midway_step][j + midway_step] = (1-(4*W))* norm.pdf(y)[0] + upper_left_point*W + upper_right_point*W + bottom_left_point*W + bottom_right_point*W
-                    
+                    if not iteration:
+                        self.array[i + midway_step][j + midway_step] = (1-(4*W))* random.random() + upper_left_point*W + upper_right_point*W + bottom_left_point*W + bottom_right_point*W
+                    else:
+                        self.array[i + midway_step][j + midway_step] = (1-(4*W))* self.array[i + midway_step][j + midway_step]  + upper_left_point*W + upper_right_point*W + bottom_left_point*W + bottom_right_point*W
+
     def square_step(self, step_size):
         midway_step = step_size//2
         odd_case = True
@@ -95,7 +97,10 @@ class Array:
                     x = np.random.normal(0,1,1)
                     W_func = ((norm.pdf(x)*1.25))
                     y = np.random.normal((0,2,1))
-                    self.array[j][i] = (1-(2*W_func))*norm.pdf(y)[0]+left_field*W_func +right_field*W_func #+ up_field*W_func + down_field*W_func
+                    if not iteration:
+                        self.array[j][i] = (1-(2*W_func))*norm.pdf(y)[0]+left_field*W_func +right_field*W_func #+ up_field*W_func + down_field*W_func
+                    else:
+                        self.array[j][i] = (1-(2*W_func))*self.array[j][i]+left_field*W_func +right_field*W_func #+ up_field*W_func + down_field*W_func
                     #print(f'[{j}][{i}]: {left_field}, {right_field}, {up_field}, {down_field}')
                 #x = sum(self.array[j][i])
                 #print(f'{left(j, midway_step)} --- x:{j} ---y:{i}')
