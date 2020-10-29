@@ -74,9 +74,10 @@ class Array:
                     bottom_right_point = self.array[i + step_size][j + step_size]
                     #print(f"i:{i} --- j:{j}")
                     #print(i + midway_step)
-                    x = random.random()
-                    W = norm.pdf(x)/2
-                    self.array[i + midway_step][j + midway_step] = (1-(4*W))*(1-self.array[i + midway_step][j + midway_step]) + upper_left_point*W + upper_right_point*W + bottom_left_point*W + bottom_right_point*W
+                    x = np.random.normal(0,1,1)
+                    W = ((norm.pdf(x)*1.25)/2)
+                    y = np.random.normal((0,2,1))
+                    self.array[i + midway_step][j + midway_step] = (1-(4*W))* norm.pdf(y)[0] + upper_left_point*W + upper_right_point*W + bottom_left_point*W + bottom_right_point*W
                     
     def square_step(self, step_size):
         midway_step = step_size//2
@@ -91,9 +92,10 @@ class Array:
                 up_field = (lambda i, j, mid_step: 0 if i-mid_step<0 else self.array[i-mid_step][j])(i, j, midway_step)
                 down_field = (lambda i, j, mid_step: 0 if i+mid_step>self.size-1 else self.array[i+mid_step][j])(i, j, midway_step)
                 if(self.array[j][i]==0 or iteration!=0):
-                    x = random.random()
-                    W_func = norm.pdf(x)
-                    self.array[j][i] = (1-(2*W_func))*x +left_field*W_func +right_field*W_func
+                    x = np.random.normal(0,1,1)
+                    W_func = ((norm.pdf(x)*1.25))
+                    y = np.random.normal((0,2,1))
+                    self.array[j][i] = (1-(2*W_func))*norm.pdf(y)[0]+left_field*W_func +right_field*W_func #+ up_field*W_func + down_field*W_func
                     #print(f'[{j}][{i}]: {left_field}, {right_field}, {up_field}, {down_field}')
                 #x = sum(self.array[j][i])
                 #print(f'{left(j, midway_step)} --- x:{j} ---y:{i}')
@@ -113,9 +115,8 @@ class Array:
 def startup():
     update_viewport(None, 400, 400)
     glClearColor(0.5, 0.5, 0.5, 1.0)
-    array = Array(33)
+    array = Array(129)
     array.grayscale_init()
-    array.diamond_square_algorithm()
     array.print_array()
     print("="*50)
     return array
