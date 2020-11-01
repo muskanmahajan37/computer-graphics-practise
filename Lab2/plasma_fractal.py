@@ -9,32 +9,6 @@ from OpenGL.GLU import *
 
 
 iteration = 0
-'''
-Algo to be implemented
-    def diamondSquare(height, width):
-        Map -> 2D array of 0s
-        initialize array with 4 values on the edges
-        step_size = width -1
-        r -> random value 
-            while step_size > 1:
-                leap over map
-                
-                For every square on the map
-                    perform diamond_step
-                For evety diamond on the map
-                    perform square_step
-            step_size /= 2
-            reduce random range for r
-
-    def diamond_step(x,y,step_size, r):
-        avg = average of square corners step_size apart
-        map[x+step_size/2][y+step_size/2] = avg + r
-
-    def square_step(x,y,step_size, r):
-        avg = avg of four corners of diamond
-        map[x][y] = avg + r
-        
-'''
 
 class Array:
     
@@ -63,7 +37,7 @@ class Array:
         return (random.uniform(0,1) for i in range(0,3))
 
     def diamond_step(self, step_size):
-        midway_step = step_size // 2
+        midway_step = step_size // 2    #step_size = 4 midway_step =1  
 
         for i in range(0, self.size, step_size):
             for j in range(0, self.size, step_size):
@@ -73,13 +47,14 @@ class Array:
                     bottom_left_point = self.array[i][j + step_size]
                     bottom_right_point = self.array[i + step_size][j + step_size]
                     #print(f"i:{i} --- j:{j}")
+
                     #print(i + midway_step)
                     x = np.random.normal(0,1,1)
                     W = ((norm.pdf(x)*1.25)/2)
                     if not iteration:
                         self.array[i + midway_step][j + midway_step] = (1-(4*W))* random.random() + upper_left_point*W + upper_right_point*W + bottom_left_point*W + bottom_right_point*W
                     else:
-                        self.array[i + midway_step][j + midway_step] = (1-(4*W))* self.array[i + midway_step][j + midway_step]  + upper_left_point*W + upper_right_point*W + bottom_left_point*W + bottom_right_point*W
+                        self.array[i + midway_step][j + midway_step] = (1-(4*W))* self.array[i + midway_step][j + midway_step] + upper_left_point*W + upper_right_point*W + bottom_left_point*W + bottom_right_point*W
 
     def square_step(self, step_size):
         midway_step = step_size//2
@@ -100,7 +75,7 @@ class Array:
                     if not iteration:
                         self.array[j][i] = (1-(2*W_func))*norm.pdf(y)[0]+left_field*W_func +right_field*W_func #+ up_field*W_func + down_field*W_func
                     else:
-                        self.array[j][i] = (1-(2*W_func))*self.array[j][i]+left_field*W_func +right_field*W_func #+ up_field*W_func + down_field*W_func
+                        self.array[j][i] = (1-(2*W_func))*norm.pdf(y)[0]+left_field*W_func +right_field*W_func #+ up_field*W_func + down_field*W_func
                     #print(f'[{j}][{i}]: {left_field}, {right_field}, {up_field}, {down_field}')
                 #x = sum(self.array[j][i])
                 #print(f'{left(j, midway_step)} --- x:{j} ---y:{i}')
@@ -108,7 +83,7 @@ class Array:
 
     def diamond_square_algorithm(self):
         global iteration
-        step_size = self.size-1
+        step_size = self.size - 1
         print('Size:', step_size, '  Iteration:', iteration)
         while step_size > 1:
             self.diamond_step(step_size)
@@ -120,7 +95,7 @@ class Array:
 def startup():
     update_viewport(None, 400, 400)
     glClearColor(0.5, 0.5, 0.5, 1.0)
-    array = Array(129)
+    array = Array(17)
     array.grayscale_init()
     array.print_array()
     print("="*50)
@@ -128,16 +103,33 @@ def startup():
 def shutdown():
     pass
     
-def render(time, array):
-    array.diamond_square_algorithm()
-    glClear(GL_COLOR_BUFFER_BIT)
-    glPointSize(4)
+    '''
     glBegin(GL_POINTS)
     for i in range(0,array.size):
         for j in range(0,array.size):
             color = array.array[i][j]
             glColor3fv([color, color, color])
             glVertex2f(i * 100.0/array.size - 50, j*100.0/array.size -50)
+    glEnd()
+    '''
+def render(time, array):
+    array.diamond_square_algorithm()
+    glClear(GL_COLOR_BUFFER_BIT)
+    glBegin(GL_TRIANGLE_STRIP)
+    for i in range(0,array.size-1):
+        for j in range(0,array.size-1):
+            color = array.array[i][j]
+            glColor3fv([color, color, color])
+            glVertex2f(i * 100.0/array.size - 50, j*100.0/array.size -50)
+            color = array.array[i][j+1]
+            glColor3fv([color, color, color])
+            glVertex2f(i * 100.0/array.size - 50, (j+1)*100.0/array.size -50)
+            color = array.array[i+1][j]
+            glColor3fv([color, color, color])
+            glVertex2f((i+1) * 100.0/array.size - 50, j*100.0/array.size -50)
+            color = array.array[i+1][j+1]
+            glColor3fv([color, color, color])
+            glVertex2f((i+1) * 100.0/array.size - 50, (j+1)*100.0/array.size -50)
     glEnd()
     glFlush()
 
