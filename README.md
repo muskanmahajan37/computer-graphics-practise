@@ -1,1 +1,1 @@
-# computer-graphics-practise
+# Lab2 --- Sierpinski carpet & plasma fractal

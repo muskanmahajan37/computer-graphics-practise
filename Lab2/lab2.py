@@ -69,7 +69,7 @@ def draw_rectangle(x_of_center,y_of_center, width, height, color = [], d = 1):
     glFlush()
     return colors
 
-
+#123
 def render(time):
     glClear(GL_COLOR_BUFFER_BIT)
     #draw_rectangle(0,0,50.0,50.0, colors,2.0)
