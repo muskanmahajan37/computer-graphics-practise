@@ -76,10 +76,11 @@ class Array:
                     #print(i + midway_step)
                     x = np.random.normal(0,1,1)
                     W = ((norm.pdf(x)*1.25)/2)
+                    y = np.random.normal((0,2,1))
                     if not iteration:
-                        self.array[i + midway_step][j + midway_step] = (1-(4*W))* random.random() + upper_left_point*W + upper_right_point*W + bottom_left_point*W + bottom_right_point*W
+                        self.array[i + midway_step][j + midway_step] = (1-(4*W))* norm.pdf(y)[0]*1.5 + upper_left_point*W + upper_right_point*W + bottom_left_point*W + bottom_right_point*W
                     else:
-                        self.array[i + midway_step][j + midway_step] = (1-(4*W))* self.array[i + midway_step][j + midway_step]  + upper_left_point*W + upper_right_point*W + bottom_left_point*W + bottom_right_point*W
+                        self.array[i + midway_step][j + midway_step] = (1-(4*W))* norm.pdf(y)[0]*1.5  + upper_left_point*W + upper_right_point*W + bottom_left_point*W + bottom_right_point*W
 
     def square_step(self, step_size):
         midway_step = step_size//2
@@ -89,16 +90,16 @@ class Array:
             #print(odd_case)
             #print(x)
             for j in range (x, self.size, midway_step):
-                left_field = (lambda i, j, mid_step: 0 if j-mid_step<0 else self.array[i][j-mid_step])(i, j, midway_step)
-                right_field = (lambda i, j, mid_step: 0 if j+mid_step>self.size-1 else self.array[i][j+mid_step])(i, j, midway_step)
+                left_field = (lambda i, j, mid_step: random.random() if j-mid_step<0 else self.array[i][j-mid_step])(i, j, midway_step)
+                right_field = (lambda i, j, mid_step: random.random() if j+mid_step>self.size-1 else self.array[i][j+mid_step])(i, j, midway_step)
                 up_field = (lambda i, j, mid_step: 0 if i-mid_step<0 else self.array[i-mid_step][j])(i, j, midway_step)
                 down_field = (lambda i, j, mid_step: 0 if i+mid_step>self.size-1 else self.array[i+mid_step][j])(i, j, midway_step)
                 if(self.array[j][i]==0 or iteration!=0):
-                    x = np.random.normal(0,1,1)
+                    x = np.random.normal(0,0.3,1)
                     W_func = ((norm.pdf(x)*1.25))
                     y = np.random.normal((0,2,1))
                     if not iteration:
-                        self.array[j][i] = (1-(2*W_func))*norm.pdf(y)[0]+left_field*W_func +right_field*W_func #+ up_field*W_func + down_field*W_func
+                        self.array[j][i] = (1-(2*W_func))*random.uniform(0,1)+left_field*W_func +right_field*W_func #+ up_field*W_func + down_field*W_func
                     else:
                         self.array[j][i] = (1-(2*W_func))*self.array[j][i]+left_field*W_func +right_field*W_func #+ up_field*W_func + down_field*W_func
                     #print(f'[{j}][{i}]: {left_field}, {right_field}, {up_field}, {down_field}')
@@ -120,7 +121,7 @@ class Array:
 def startup():
     update_viewport(None, 400, 400)
     glClearColor(0.5, 0.5, 0.5, 1.0)
-    array = Array(129)
+    array = Array(257)
     array.grayscale_init()
     array.print_array()
     print("="*50)
@@ -129,15 +130,17 @@ def shutdown():
     pass
     
 def render(time, array):
+    array.grayscale_init()
     array.diamond_square_algorithm()
     glClear(GL_COLOR_BUFFER_BIT)
-    glPointSize(4)
+    glPointSize(2)
     glBegin(GL_POINTS)
     for i in range(0,array.size):
         for j in range(0,array.size):
             color = array.array[i][j]
             glColor3fv([color, color, color])
             glVertex2f(i * 100.0/array.size - 50, j*100.0/array.size -50)
+    print('xxxx')
     glEnd()
     glFlush()
 
