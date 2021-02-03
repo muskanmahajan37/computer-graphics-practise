@@ -1,4 +1,23 @@
 #!/usr/bin/env python3
+
+'''
+gitdb==4.0.5
+GitPython==3.1.10
+glfw==2.0.0
+mccabe==0.6.1
+numpy==1.19.2
+pbr==5.5.1
+pycodestyle==2.6.0
+pyflakes==2.2.0
+PyOpenGL==3.1.5
+PyYAML==5.3.1
+scipy==1.5.3
+six==1.15.0
+smmap==3.0.4
+stevedore==3.2.2
+
+'''
+
 import sys
 import numpy as np
 from glfw.GLFW import *
